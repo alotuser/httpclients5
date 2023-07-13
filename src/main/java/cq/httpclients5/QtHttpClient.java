@@ -325,7 +325,7 @@ public class QtHttpClient {
 				.setKeepAliveStrategy(defaultKeepAliveStrategy)
 				.setUserAgent(defaultUserAgent)
 				.setProxy(defaultProxyHttpHost);
-		
+		 
 		if(null!=qtDefaultClient&&qtDefaultClient.referers!=null) {
 			switch (qtDefaultClient.referers) {
 			case DEFAULT:
@@ -714,9 +714,7 @@ public class QtHttpClient {
 			}
 		}
 		qtProxyList.addAll(Arrays.asList(qtProxys));
-		
 		defaultCredentialsProvider=QtCredentialsProviderBuilder.getCredentialsProvider(qtProxyList);
-		
 	}
 	/**
 	 * 获取结果
@@ -783,6 +781,8 @@ public class QtHttpClient {
 			httpclient.close();
 		}
 	}
+
+ 
 
 	
 }
