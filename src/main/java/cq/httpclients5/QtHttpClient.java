@@ -41,6 +41,7 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.DefaultHttpResponseParserFactory;
 import org.apache.hc.client5.http.impl.io.ManagedHttpClientConnectionFactory;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
 import org.apache.hc.client5.http.io.ManagedHttpClientConnection;
 import org.apache.hc.client5.http.protocol.HttpClientContext;
 import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
@@ -314,6 +315,8 @@ public class QtHttpClient {
 			}
 		};
 		
+		final DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(defaultProxyHttpHost);
+		
 		//Lookup<CookieSpecProvider> cookieSpecRegistry=new Lookup<CookieSpecProvider>() {public CookieSpecProvider lookup(String s) {System.out.println(s);return null;}};
 		//Create an HttpClient with the given custom dependencies and configuration.
 		HttpClientBuilder defaultHttpClientBuilder=HttpClients.custom()
@@ -322,10 +325,18 @@ public class QtHttpClient {
 				//.setDefaultCookieSpecRegistry(defaultCookieSpecRegistry)
 				.setDefaultCookieStore(defaultCookieStore)
 				.setDefaultCredentialsProvider(defaultCredentialsProvider)
+				.setProxy(defaultProxyHttpHost)
+				.setRoutePlanner(routePlanner)
+				
+				
 				.setKeepAliveStrategy(defaultKeepAliveStrategy)
+				
 				.setUserAgent(defaultUserAgent)
-				.setProxy(defaultProxyHttpHost);
-		 
+				;
+		
+		  
+		
+		
 		if(null!=qtDefaultClient&&qtDefaultClient.referers!=null) {
 			switch (qtDefaultClient.referers) {
 			case DEFAULT:
@@ -479,7 +490,10 @@ public class QtHttpClient {
 			
 			//File
 			if (null != request.postFile&&!request.postFile.isEmpty()) {
-				/*InputStreamEntity reqEntity = new InputStreamEntity(new FileInputStream(request.postFile), -1, ContentType.APPLICATION_OCTET_STREAM);
+				
+				//1.post a file 
+				/*
+				 * InputStreamEntity reqEntity = new InputStreamEntity(new FileInputStream(request.postFile), -1, ContentType.APPLICATION_OCTET_STREAM);
 				reqEntity.setChunked(true);
 				// It may be more appropriate to use FileEntity class in this particular
 				// instance but we are using a more generic InputStreamEntity to demonstrate
@@ -487,8 +501,9 @@ public class QtHttpClient {
 				//
 				// FileEntity entity = new FileEntity(file, "binary/octet-stream");
 				// FileEntity entity = new FileEntity(request.postFile, contentType.APPLICATION_OCTET_STREAM);
-				httppost.setEntity(reqEntity);*/
-				// Post files
+				httppost.setEntity(reqEntity);
+				*/
+				//2.Post files
 				MultipartEntityBuilder multipartEntityBuilder=MultipartEntityBuilder.create();
 				
 				
